@@ -4,6 +4,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+function iskUperCaseCharacter(str) {
+    for (let i = 0; i < str.length; i += 1) {
+        if (str[i].toUpperCase() === str[i]) {
+            return true;
+        }
+    }
+    return false;
+}
 const app = (0, express_1.default)();
 const port = 4000;
 app.use(express_1.default.json());
@@ -14,7 +22,7 @@ app.post('/name', (req, res) => {
     const personalData = req.body;
     const responseData200 = { message: 'Ok' };
     const responseData400 = { message: 'Error: Bad Request' };
-    if (personalData.firstName[0].toUpperCase() === personalData.firstName[0])
+    if (iskUperCaseCharacter(personalData.firstName))
         res.status(200).json(Object.assign({}, responseData200));
     else
         res.status(400).json(Object.assign({}, responseData400));

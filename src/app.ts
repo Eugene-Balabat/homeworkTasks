@@ -2,6 +2,15 @@ import express from 'express'
 import { type } from 'os'
 import { RequestData, ResolvedData } from './interface'
 
+function iskUperCaseCharacter(str: string): boolean {
+    for (let i = 0; i < str.length; i += 1) {
+        if (str[i].toUpperCase() === str[i]) {
+            return true
+        }
+    }
+    return false
+}
+
 const app = express()
 const port = 4000
 
@@ -17,7 +26,7 @@ app.post('/name', (req, res) => {
     const responseData200: ResolvedData = { message: 'Ok' }
     const responseData400: ResolvedData = { message: 'Error: Bad Request' }
 
-    if (personalData.firstName[0].toUpperCase() === personalData.firstName[0])
+    if (iskUperCaseCharacter(personalData.firstName))
         res.status(200).json({ ...responseData200 })
     else res.status(400).json({ ...responseData400 })
 })
