@@ -26,7 +26,7 @@ const funcs = [
         resolve(data);
     }),
 ];
-function mainFunc(funcsPromises, tasksPerSec) {
+function mainFunc(funcsPromises, tasksPerSec, seconds) {
     const resultArr = [];
     const arrPromises = [];
     funcsPromises.forEach((func) => {
@@ -36,11 +36,11 @@ function mainFunc(funcsPromises, tasksPerSec) {
         Promise.all(arrPromises.splice(0, tasksPerSec)).then((results) => {
             results.forEach((element) => {
                 resultArr.push(element);
-                console.log(element);
+                console.log(`${element.message} ${new Date()}`);
             });
             if (!arrPromises.length)
                 clearInterval(interval);
         });
-    }, 1000);
+    }, seconds * 1000);
 }
-mainFunc(funcs, 1);
+mainFunc(funcs, 2, 5);

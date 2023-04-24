@@ -33,7 +33,11 @@ const funcs: Array<Function> = [
         }),
 ]
 
-function mainFunc(funcsPromises: Array<Function>, tasksPerSec: number): void {
+function mainFunc(
+    funcsPromises: Array<Function>,
+    tasksPerSec: number,
+    seconds: number
+): void {
     const resultArr: Array<ResolvedData> = []
     const arrPromises: Array<Promise<ResolvedData>> = []
 
@@ -45,12 +49,12 @@ function mainFunc(funcsPromises: Array<Function>, tasksPerSec: number): void {
         Promise.all(arrPromises.splice(0, tasksPerSec)).then((results) => {
             results.forEach((element) => {
                 resultArr.push(element)
-                console.log(element)
+                console.log(`${element.message} ${new Date()}`)
             })
 
             if (!arrPromises.length) clearInterval(interval)
         })
-    }, 1000)
+    }, seconds * 1000)
 }
 
-mainFunc(funcs, 1)
+mainFunc(funcs, 2, 5)

@@ -19,8 +19,8 @@ app.post('/name', (req, res) => {
     else
         res.status(400).json(Object.assign({}, responseData400));
 });
-// Do not understend, how shoud i using only RequestData type als body params. Client can send us any data. How can i say,
-// that i use only RequestData, anotherway will be Error.
+// Do not understend, how shoud i using only RequestData type as body params. Client can send us any data. How can i say,
+// that i use only RequestData, anotherway will be Error. Now client can send propertie lastName as number.
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
 });
