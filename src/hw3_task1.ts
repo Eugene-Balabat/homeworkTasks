@@ -1,4 +1,3 @@
-import { resolve } from 'path'
 import { ResolvedData } from './interface'
 
 const funcs: Array<Function> = [
