@@ -1,5 +1,15 @@
 module.exports = {
-  extends: ["./node_modules/poetic/config/eslint/eslint-config.js"],
-  // Add custom rules here
-  rules: {}
-};
+    root: true,
+    plugins: ['@typescript-eslint', 'import', 'prettier'],
+    extends: [
+        'airbnb',
+        'airbnb-typescript/base',
+        'prettier',
+        'plugin:@typescript-eslint/recommended',
+        'plugin:import/typescript',
+    ],
+    parser: '@typescript-eslint/parser',
+    parserOptions: {
+        project: './tsconfig.eslint.json',
+    },
+}

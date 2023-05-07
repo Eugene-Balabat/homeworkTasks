@@ -11,3 +11,15 @@ export interface TokenData {
     userId: number
     userLogin: string
 }
+
+export interface UserData {
+    id: number
+    login: string
+}
+
+export interface UserTable {
+    login: string
+    password: string
+    firstName: string
+    lastName: string
+}
