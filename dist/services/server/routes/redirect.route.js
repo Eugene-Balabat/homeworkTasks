@@ -9,12 +9,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const db_client_service_1 = require("./services/db-client/db-client.service");
-const server_service_1 = require("./services/server/server.service");
-function bootstrap() {
-    return __awaiter(this, void 0, void 0, function* () {
-        const databaseService = yield new db_client_service_1.DatabaseService().initializeConnection();
-        const application = yield new server_service_1.ServerService(databaseService).initializeServer();
-    });
+const auth_middleware_1 = require("../middlewares/auth.middleware");
+function setRoute(app) {
+    function route(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            res.redirect(301, 'https://www.google.com/');
+        });
+    }
+    app.get('/redirect', auth_middleware_1.authMiddleware, route);
 }
-bootstrap();
+exports.default = setRoute;
