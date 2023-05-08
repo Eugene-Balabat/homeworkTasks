@@ -50,3 +50,4 @@ export class DatabaseService {
 }
 
 // TODO: уровни транзакций
+// Objection.JS или TypeORM - выбор за тобою
