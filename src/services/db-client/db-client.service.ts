@@ -48,3 +48,5 @@ export class DatabaseService {
         return result.rowCount > 0 ? result.rows[0] : undefined
     }
 }
+
+// TODO: уровни транзакций
