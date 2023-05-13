@@ -1,11 +1,22 @@
-import { MigrationInterface, QueryRunner } from 'typeorm'
+import { MigrationInterface, QueryRunner, Table } from 'typeorm'
 
 export class CreateUserTable1683836502513 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query('create table if not exists users (id SERIAL PRIMARY KEY, login varchar(50), password varchar(50))')
+        await queryRunner.createTable(
+            new Table({
+                name: 'users',
+                columns: [
+                    { name: 'id', isPrimary: true, type: 'int8', unsigned: true },
+                    { name: 'login', isPrimary: true, type: 'varchar', length: '50' },
+                    { name: 'password', isPrimary: true, type: 'varchar', length: '50' },
+                ],
+            })
+        )
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query('drop table if exists users')
+        await queryRunner.dropTable('users')
     }
 }
+
+// TODO: create new migration file with disabling primary for columns login and password

@@ -10,7 +10,7 @@ export function setAuthRoute(app: express.Application, databaseService: Database
         if (login && password) {
             const result = await databaseService.getUser(login, password, redisService)
 
-            if (result !== undefined) {
+            if (result) {
                 const token = jwt.sign({ userId: result.id, userLogin: result.login }, process.env.SECRET_KEY as string, { expiresIn: '1h' })
 
                 res.cookie('jwtToken', token, { httpOnly: true }).status(200).send()

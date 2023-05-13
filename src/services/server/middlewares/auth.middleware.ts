@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from 'express'
 import jwt from 'jsonwebtoken'
 import { TokenData } from 'old/interface'
 
-// DONE: расширить интерфейс Request на глобально уровне используя деларацию типов .d.ts
 export function authMiddleware(req: Request, res: Response, next: NextFunction): void {
     const { jwtToken } = req.cookies
 
@@ -12,6 +11,7 @@ export function authMiddleware(req: Request, res: Response, next: NextFunction):
 
             req.userId = userId
             req.userLogin = userLogin
+
             return next()
         } catch {
             res.status(401).send()

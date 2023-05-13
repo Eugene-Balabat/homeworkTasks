@@ -4,14 +4,9 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "startcopy": "tsc && typeorm migration:run -d dist/orm.config.js && typeorm migration:revert -d dist/orm.config.js && node dist/app.js",
-        "start": "tsc && typeorm migration:run -d dist/orm.config.js && node dist/app.js",
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "code:check": "yarn code:lint; yarn code:format --check",
-        "code:clean": "yarn code:lint --fix; yarn code:format --write",
-        "code:lint": "eslint --ext .js,.jsx,.ts,.tsx \"src/\"",
-        "code:format": "prettier './src/**/**.{js,jsx,ts,tsx}'",
-        "code:check:rules": "eslint --print-config .eslintrc.js | eslint-config-prettier-check"
+        "migrate:run": "tsc && typeorm migration:run -d dist/orm.config.js",
+        "migrate:revert": "tsc && typeorm migration:revert -d dist/orm.config.js",
+        "start": "tsc && npm run migrate:run && node dist/app.js"
     },
     "author": "",
     "license": "ISC",

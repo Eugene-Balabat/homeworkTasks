@@ -1,7 +1,7 @@
-import { RedisService } from './services/redis/redis.service'
+import './models/user.model'
 import { DatabaseService } from './services/db-client/db-client.service'
+import { RedisService } from './services/redis/redis.service'
 import { ServerService } from './services/server/server.service'
-import 'reflect-metadata'
 
 async function bootstrap() {
     const databaseService = await new DatabaseService().initializeConnection()
