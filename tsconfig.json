@@ -9,10 +9,12 @@
         "outDir": "./dist",
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
         "strict": true,
         "skipLibCheck": true,
         "allowSyntheticDefaultImports": true
     },
-    "include": ["src"],
+    "include": ["src", "dist/orm.config.js"],
     "exclude": ["node_modules", "dist"]
 }

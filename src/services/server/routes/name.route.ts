@@ -10,16 +10,24 @@ export default function setRoute(app: express.Application) {
         return false
     }
 
-    async function route(req: Request, res: Response) {
-        // TODO: используя дженерик расширить тип Request что бы body в нёр был типа RequestData
-        const personalData: RequestData = req.body
+    interface modifedRequest extends Request {
+        body: RequestData
+    }
 
+    //async function route<T extends { body: RequestData }>(req: T, res: Response) {
+    async function route(req: modifedRequest, res: Response) {
+        // DONE: используя дженерик расширить тип Request что бы body в нёр был типа RequestData
+        const personalData = req.body
+
+        console.log(personalData)
         if (isUperCaseCharacter(personalData.firstName, /[A-Z]/)) {
             res.status(200).send()
         } else {
             res.status(400).send()
         }
+
+        res.status(400).send()
     }
 
-    app.get('/name', authMiddleware, route)
+    app.post('/name', authMiddleware, route)
 }

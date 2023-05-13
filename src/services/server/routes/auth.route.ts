@@ -1,17 +1,18 @@
 import express, { Request, Response } from 'express'
 import jwt from 'jsonwebtoken'
 import { DatabaseService } from 'services/db-client/db-client.service'
-import { authMiddleware } from '../middlewares/auth.middleware'
+import { RedisService } from '../../redis/redis.service'
 
-export default function setRoute(app: express.Application, databaseService: DatabaseService) {
+export function setAuthRoute(app: express.Application, databaseService: DatabaseService, redisService: RedisService) {
     async function route(req: Request, res: Response) {
         const { login, password } = req.body
 
         if (login && password) {
-            const user = await databaseService.getUser(login, password)
+            const result = await databaseService.getUser(login, password, redisService)
 
-            if (user) {
-                const token = jwt.sign({ userId: user.id, userLogin: user.login }, process.env.SECRET_KEY as string, { expiresIn: '1h' })
+            if (result !== undefined) {
+                const token = jwt.sign({ userId: result.id, userLogin: result.login }, process.env.SECRET_KEY as string, { expiresIn: '1h' })
+
                 res.cookie('jwtToken', token, { httpOnly: true }).status(200).send()
             } else {
                 res.status(400).json()
@@ -21,5 +22,5 @@ export default function setRoute(app: express.Application, databaseService: Data
         }
     }
 
-    app.get('/auth', authMiddleware, route)
+    app.post('/auth', route)
 }
