@@ -13,5 +13,5 @@ export default function setRoute(app: express.Application) {
         }
     }
 
-    app.get('/save-file', authMiddleware, multer({ dest: 'uploads/' }).single('image'), route)
+    app.post('/save-file', authMiddleware, multer({ dest: 'uploads/' }).single('image'), route)
 }

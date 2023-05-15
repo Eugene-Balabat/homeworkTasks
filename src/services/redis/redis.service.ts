@@ -10,7 +10,7 @@ export class RedisService {
     async initializeService() {
         this.redisClient.on('error', (err) => console.log('Redis Client Error', err))
 
-        await this.redisClient.connect()
+        //await this.redisClient.connect()
         return this
     }
 

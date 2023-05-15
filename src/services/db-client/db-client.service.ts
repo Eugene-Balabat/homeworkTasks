@@ -19,8 +19,10 @@ export class DatabaseService {
         await this.client.query(`insert into users (login, password) values (${login}, ${password})`)
     }
 
-    async getUser(login: string, password: string, redisService: RedisService): Promise<User | null> {
+    async getUser(login: string, password: string): Promise<User | null> {
         // TODO: посмотреть варианты запросов и фильтраций для typeorm и обязательно для (связанных таблиц)
-        return this.client.getRepository(User).findOne({ where: { login, password }, select: ['id', 'login'] })
+        const repo = await this.client.getRepository(User)
+        const data = await repo.findOne({ where: { login, password }, select: ['id', 'login'] })
+        return null
     }
 }
