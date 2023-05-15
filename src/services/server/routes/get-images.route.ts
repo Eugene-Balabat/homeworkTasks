@@ -1,17 +1,16 @@
 import express, { Request, Response } from 'express'
-import multer from 'multer'
 import { authMiddleware } from '../middlewares/auth.middleware'
 import { DatabaseService } from 'services/db-client/db-client.service'
 
 export default function setRoute(app: express.Application, databaseService: DatabaseService) {
     async function route(req: Request, res: Response) {
         try {
-            const { file } = req
-            const { user_id } = req.query
+            const { userId } = req.body
 
-            if (file && user_id) {
-                await databaseService.insertNewUserImage(file.filename, Number(user_id))
-                res.status(200).json({ fileSize: file.size })
+            if (userId) {
+                const result = await (await databaseService.getAllUserImages(Number(userId))).map((element) => element.title)
+
+                result ? res.status(200).send(result) : res.status(400).send()
             } else {
                 res.status(400).send()
             }
@@ -20,5 +19,5 @@ export default function setRoute(app: express.Application, databaseService: Data
         }
     }
 
-    app.post('/save-file', authMiddleware, multer({ dest: 'uploads/' }).single('image'), route)
+    app.post('/get-images', authMiddleware, route)
 }

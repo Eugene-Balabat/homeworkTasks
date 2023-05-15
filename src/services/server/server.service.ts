@@ -6,6 +6,7 @@ import setNameRoute from './routes/name.route'
 import setRedirectRoute from './routes/redirect.route'
 import setSaveFileRoute from './routes/save-file.route'
 import setUnAuthRoute from './routes/un-auth.route'
+import setGetImagesRoute from './routes/get-images.route'
 import { RedisService } from 'services/redis/redis.service'
 
 export class ServerService {
@@ -26,8 +27,9 @@ export class ServerService {
         setAuthRoute(this.app, this.databaseService, this.redisService)
         setUnAuthRoute(this.app)
         setRedirectRoute(this.app)
-        setSaveFileRoute(this.app)
+        setSaveFileRoute(this.app, this.databaseService)
         setNameRoute(this.app)
+        setGetImagesRoute(this.app, this.databaseService)
 
         //this.databaseService.insertNewUser('user', 'user')
 
