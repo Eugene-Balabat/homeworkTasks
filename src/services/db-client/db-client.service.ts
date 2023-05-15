@@ -1,4 +1,3 @@
-import { RedisService } from 'services/redis/redis.service'
 import { DataSource } from 'typeorm'
 import { User } from '../../models/user.model'
 import dataSource from '../../orm.config'
@@ -21,6 +20,7 @@ export class DatabaseService {
 
     async getUser(login: string, password: string): Promise<User | null> {
         // TODO: посмотреть варианты запросов и фильтраций для typeorm и обязательно для (связанных таблиц)
+
         const repo = await this.client.getRepository(User)
         const data = await repo.findOne({ where: { login, password }, select: ['id', 'login'] })
         return null

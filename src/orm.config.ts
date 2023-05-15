@@ -1,4 +1,5 @@
 import * as dotenv from 'dotenv'
+import path from 'path'
 import { DataSource, DataSourceOptions } from 'typeorm'
 
 dotenv.config()
@@ -10,8 +11,8 @@ export const connectionData: DataSourceOptions = {
     username: String(process.env.DB_USERNAME),
     password: String(process.env.DB_PASSWORD),
     database: String(process.env.DB_NAME),
-    migrations: ['dist/migrations/**/*{.ts,.js}'],
-    entities: ['/dist/models/**/*{.ts,.js}'],
+    migrations: [path.join(__dirname, './migrations/**/*{.ts,.js}')],
+    entities: [path.join(__dirname, './models/**/*{.ts,.js}')],
     synchronize: false,
     cache: { duration: 1 },
 }

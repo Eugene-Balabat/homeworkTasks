@@ -1,8 +1,8 @@
-import { Column, Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm'
+import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
 import { User } from './user.model'
 
-@Entity()
-export class Image {
+@Entity({ name: 'images' })
+export class Image extends BaseEntity {
     @PrimaryGeneratedColumn({ name: 'id' })
     id!: number
 
