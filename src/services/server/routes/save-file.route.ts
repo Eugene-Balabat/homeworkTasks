@@ -1,7 +1,8 @@
 import express, { Request, Response } from 'express'
+import fs from 'fs'
 import multer from 'multer'
-import { authMiddleware } from '../middlewares/auth.middleware'
 import { DatabaseService } from 'services/db-client/db-client.service'
+import { authMiddleware } from '../middlewares/auth.middleware'
 
 export default function setRoute(app: express.Application, databaseService: DatabaseService) {
     async function route(req: Request, res: Response) {
@@ -10,6 +11,8 @@ export default function setRoute(app: express.Application, databaseService: Data
             const { user_id } = req.query
 
             if (file && user_id) {
+                await fs.writeFileSync(`/uploads/${file.filename}`, file.buffer)
+
                 await databaseService.insertNewUserImage(file.filename, Number(user_id))
                 res.status(200).json({ fileSize: file.size })
             } else {
@@ -20,5 +23,5 @@ export default function setRoute(app: express.Application, databaseService: Data
         }
     }
 
-    app.post('/save-file', authMiddleware, multer({ dest: 'uploads/' }).single('image'), route)
+    app.post('/save-file', authMiddleware, multer().single('image'), route)
 }

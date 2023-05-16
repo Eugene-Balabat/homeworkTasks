@@ -1,19 +1,20 @@
-import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
 import { User } from './user.model'
 
 @Entity({ name: 'images' })
 export class Image extends BaseEntity {
-    @PrimaryGeneratedColumn({ name: 'id' })
+    @PrimaryGeneratedColumn({ name: 'id', type: 'int8' })
     id!: number
 
-    @Column({ primary: false, type: 'varchar', length: 50, name: 'title' })
+    @Column({ primary: false, type: 'varchar', length: 100, name: 'title' })
     title!: string
 
-    // @ManyToOne((type) => User, (user) => user.id)
-    // user!: User
-
     @Column({ primary: false, type: 'int8', name: 'user_id' })
-    idUser!: number
+    userId!: number
+
+    @ManyToOne(() => User)
+    @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
+    user!: User
 }
 
 // DONE: сделать репозиторий для таблицы фотографий пользователей

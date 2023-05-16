@@ -1,7 +1,7 @@
 import { DataSource } from 'typeorm'
+import { Image } from '../../models/image.model'
 import { User } from '../../models/user.model'
 import dataSource from '../../orm.config'
-import { Image } from '../../models/image.model'
 
 export class DatabaseService {
     private client: DataSource
@@ -12,11 +12,16 @@ export class DatabaseService {
 
     async initializeConnection() {
         await this.client.initialize()
+
+        const usersWithhotos = await this.client.getRepository(User).find({ relations: ['images'] })
+
+        console.log(usersWithhotos)
+
         return this
     }
 
     async insertNewUser(login: string, password: string): Promise<void> {
-        await this.client.query(`insert into users (login, password) values (${login}, ${password})`)
+        await this.client.getRepository(User).save(this.client.getRepository(User).create({ login, password }))
     }
 
     async getUser(login: string, password: string): Promise<User | null> {
@@ -27,16 +32,16 @@ export class DatabaseService {
 
     async insertNewUserImage(imageName: string, userId: number): Promise<void> {
         const user = await this.client.getRepository(User).findOne({ where: { id: userId }, select: ['id'] })
-        const image = new Image()
+        const image = this.client.getRepository(Image).create({ title: '1', userId: 2 })
 
         if (user) {
             const imageRepo = await this.client.getRepository(Image)
 
             image.title = imageName
-            image.idUser = user.id
+            image.userId = user.id
 
             // await image.save()
-            await imageRepo.insert(image)
+            await imageRepo.save(image)
         } else {
             throw new Error('Bad Request')
         }
@@ -45,8 +50,10 @@ export class DatabaseService {
     async getAllUserImages(userId: number): Promise<Array<Image>> {
         const user = await this.client.getRepository(User).findOne({ where: { id: userId }, select: ['id'] })
 
+        // переписать под await this.client.getRepository(User).createQueryBuilder() с фильтром только тех юзеров у которых есть фото
+
         if (user) {
-            const images = await this.client.getRepository(Image).find({ where: { idUser: userId }, select: ['title'] })
+            const images = await this.client.getRepository(Image).find({ where: { userId: userId }, select: ['title'] })
 
             return images
         } else {
