@@ -13,9 +13,13 @@ export class DatabaseService {
     async initializeConnection() {
         await this.client.initialize()
 
-        const usersWithhotos = await this.client.getRepository(User).find({ relations: ['images'] })
+        //const usersWithPhotos = await this.client.getRepository(User).find({ relations: ['images'] })
 
-        console.log(usersWithhotos)
+        const usersWithPhotos = await this.getUsersWithPhotos()
+        //  console.log(usersWithPhotos)
+
+        const images = await this.getAllUserImages(1)
+        console.log(images)
 
         return this
     }
@@ -25,8 +29,7 @@ export class DatabaseService {
     }
 
     async getUser(login: string, password: string): Promise<User | null> {
-        // TODO: посмотреть варианты запросов и фильтраций для typeorm и обязательно для (связанных таблиц),
-        //Почитай про абсолютные и относительные импорты.
+        // DONE: посмотреть варианты запросов и фильтраций для typeorm и обязательно для (связанных таблиц),
         return await this.client.getRepository(User).findOne({ where: { login, password }, select: ['id', 'login'] })
     }
 
@@ -48,16 +51,25 @@ export class DatabaseService {
     }
 
     async getAllUserImages(userId: number): Promise<Array<Image>> {
-        const user = await this.client.getRepository(User).findOne({ where: { id: userId }, select: ['id'] })
+        //const user = await this.client.getRepository(User).findOne({ where: { id: userId }, select: ['id'] })
 
-        // переписать под await this.client.getRepository(User).createQueryBuilder() с фильтром только тех юзеров у которых есть фото
+        const user = await this.client.getRepository(User).createQueryBuilder('user').where('user.id = :userId', { userId }).getOne()
+
+        //DONE: переписать под await this.client.getRepository(User).createQueryBuilder() с фильтром только тех юзеров у которых есть фото
 
         if (user) {
-            const images = await this.client.getRepository(Image).find({ where: { userId: userId }, select: ['title'] })
+            // const images = await this.client.getRepository(Image).find({ where: { userId: userId }, select: ['title'] })
+            const images = await this.client.getRepository(Image).createQueryBuilder('image').where('image.user = :userId', { userId }).getMany()
 
             return images
         } else {
             throw new Error('Bad Request')
         }
+    }
+
+    async getUsersWithPhotos() {
+        const images = await this.client.getRepository(User).createQueryBuilder('user').innerJoinAndSelect('user.images', 'image').getMany()
+
+        return images
     }
 }

@@ -18,5 +18,3 @@ export class CreateUserTable1683836502513 implements MigrationInterface {
         await queryRunner.dropTable('users')
     }
 }
-
-// DONE: create new migration file with disabling primary for columns login and password
