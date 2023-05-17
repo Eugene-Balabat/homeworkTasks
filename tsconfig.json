@@ -6,6 +6,7 @@
         "paths": {
             "*": ["./src/*"]
         },
+        "types": ["./types"],
         "outDir": "./dist",
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
@@ -15,6 +16,6 @@
         "skipLibCheck": true,
         "allowSyntheticDefaultImports": true
     },
-    "include": ["src", "dist/orm.config.js"],
+    "include": ["src", "dist/orm.config.js", "types"],
     "exclude": ["node_modules", "dist"]
 }
