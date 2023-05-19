@@ -10,13 +10,9 @@ export default function setRoute(app: express.Application, databaseService: Data
             const { file } = req
             const { user_id } = req.query
             console.log(file)
-            if (!fs.existsSync('uploads')) {
-                fs.mkdirSync('uploads', { recursive: true })
-            }
 
-            console.log(user_id)
             if (file && user_id) {
-                await fs.writeFileSync(`${file.originalname}`, file.buffer, { flag: 'ax' })
+                await fs.writeFileSync(`./uploads/${file.originalname}`, file.buffer, { flag: 'ax' })
 
                 await databaseService.insertNewUserImage(file.originalname, Number(user_id))
                 res.status(200).json({ fileSize: file.size })

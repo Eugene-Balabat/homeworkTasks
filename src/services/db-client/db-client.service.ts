@@ -1,4 +1,4 @@
-import { DataSource } from 'typeorm'
+import { Brackets, DataSource, QueryBuilder, SelectQueryBuilder } from 'typeorm'
 import { Image } from '../../models/image.model'
 import { User } from '../../models/user.model'
 import dataSource from '../../orm.config'
@@ -12,6 +12,9 @@ export class DatabaseService {
 
     async initializeConnection() {
         await this.client.initialize()
+        const images = await this.getAllUserImages(1, 0, 3)
+        console.log(images)
+
         return this
     }
 
@@ -45,11 +48,10 @@ export class DatabaseService {
         return this.client
             .getRepository(Image)
             .createQueryBuilder('image')
-            .addSelect('image.id')
-            .addSelect('image.name')
-            .where('image.user = :userId', { userId })
+            .whereExists(this.client.getRepository(User).createQueryBuilder('user').where('user.id = :userId', { userId }).andWhere('image.user = user.id'))
             .skip(page * limit)
-            .limit(limit)
+            .take(limit)
+            .orderBy('image.date', 'DESC')
             .getMany()
     }
 

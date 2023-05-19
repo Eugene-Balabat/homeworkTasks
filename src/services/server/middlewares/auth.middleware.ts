@@ -1,13 +1,12 @@
 import { NextFunction, Request, Response } from 'express'
 import jwt from 'jsonwebtoken'
-import { TokenData } from 'old/interface'
 
-export function authMiddleware(req: Request, res: Response, next: NextFunction): void {
+export async function authMiddleware(req: Request, res: Response, next: NextFunction): Promise<void> {
     const { jwtToken } = req.cookies
 
     if (jwtToken) {
         try {
-            const { userId, userLogin } = jwt.verify(jwtToken, process.env.SECRET_KEY as string) as TokenData
+            const { userId, userLogin } = (await jwt.verify(jwtToken, process.env.SECRET_KEY as string)) as { userId: number; userLogin: string }
 
             req.userId = userId
             req.userLogin = userLogin
