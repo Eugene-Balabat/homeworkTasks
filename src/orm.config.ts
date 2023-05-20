@@ -14,6 +14,7 @@ export const connectionData: DataSourceOptions = {
     migrations: [path.join(__dirname, './migrations/**/*{.ts,.js}')],
     entities: [path.join(__dirname, './models/**/*{.ts,.js}')],
     synchronize: false,
+    migrationsRun: true,
     cache: { duration: 1 },
 }
 

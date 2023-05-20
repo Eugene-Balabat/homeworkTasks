@@ -8,7 +8,7 @@ export default function setRoute(app: express.Application, databaseService: Data
             const { userId } = req.body
 
             if (userId) {
-                const result = await (await databaseService.getAllUserImages(Number(userId), 0, 5)).map((element) => element.title)
+                const result = (await databaseService.getAllUserImages(Number(userId), 0, 5)).map((element) => element.title)
 
                 result ? res.status(200).send(result) : res.status(400).send()
             } else {
